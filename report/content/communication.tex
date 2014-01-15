@@ -1,0 +1,45 @@
+%!TEX root = ../MathijsSaey-project.tex
+
+\subsection{Communication}
+
+\subsubsection{(Memory Mapped) Files}
+\label{sec:file}
+Almost anybody that has ever used a computer knows about files. While files generally convey thoughts about long term data storage, files can also easily be used to exchange information between different processes. One process can simply write something to the file, another program can read this data, and perform some action depending on the exact contents of the file. Modifying files may seem like a rather primitive way to achieve communication, but they are a simple way to achieve this, since files exist on almost any current-day operating system. This last characteristic also makes using files a strategy that is very portable between many operating systems. 
+
+When using this method, programmers should take care to synchronize access to the file.
+
+A memory mapped file is a file that is present on the random access memory, making it faster to read and write to this file.
+
+\subsubsection{Signals}
+Signals are notifications that can be sent to processes or threads, it's important to know that signals are sent asynchronously. An example of using a signal would be pressing \verb|ctrl + c| to interrupt a process running in a terminal. Doing so sends the running process a \verb|SIGINT| signal (on most UNIX systems), requesting it to interrupt execution. A program can catch this signal and respond accordingly. 
+Another use of signals is the kernel notifying a running process about a segmentation fault. Signals do not carry any extra data. Another example of signal communication can be found when using monitors, waking up threads that were waiting for a condition to be met generally happens by sending a signal to the waiting thread.
+
+In short, we can say that signals are a lightweight way of notifying processes about predefined events. 
+
+\subsubsection{Sockets}
+A socket is the endpoint of a network connection, a process can ask the operating system to create a socket on a given address and "listen" to it. A process that listens to a socket accepts the data stream that is sent through the socket, and can respond to data sent over over the network. The process on the other end of this connection can be connected to the socket over a network, but it can also be a process running on the same machine. 
+
+For instance, in SEC task 3 \cite{task3} we used a program called \textit{FakeSMTP} to locally accept SMTP connections. This program simply listened on a given local port and accepted all traffic that was sent to this port. Sending an email to FakeSMTP from my mail client is one example of inter-process communication through (local) sockets. 
+
+Sockets are another popular communication technique, since they are present on most operating systems.
+
+\subsubsection{Message Queues}
+Messages queues can be seen as a "mailbox" for a given process or thread. The idea behind message queues is quite simple, a process defines a queue which can accept external messages in an asynchronous manner. Other processes can now add data, known as messages, to the queue. The receiving thread can now read the contents of the queue and perform some action based on the contents of the queue.
+
+For instance, AmbientTalk \cite{ambienttalk}, a distributed programming language developed at the VUB, uses message queues to send asynchronous messages to \textit{remote} objects, objects that are located in a different actor (typically on another device). This mechanism allows the calling thread to send a message to a different thread without blocking.
+Message Queues were also showcased in OS task 6 \cite{task6}.
+
+
+\subsubsection{(Named) Pipes}
+Pipes are perhaps best known from the UNIX shell. Using pipes, a user can chain together different processes, passing the output from one processes as input to the next one. Pipes communicate by sending data over the standard input and output stream. 
+
+However, pipes are not limited to being created on a shell, a process can also programmatically create read and write pipes and pass them along to other processes.
+
+Named pipes work in the same way as standard pipes with one notable exception, instead of receiving data through standard input and sending data through standard output, named pipes use a file to communicate. A process can now access this file by name and either read the pipe or write to it. 
+
+The named pipe model seems to be very similar to the file mechanism discussed in section \ref{sec:file}. However named pipes are implemented differently depending on the underlying OS, for instance named pipes on windows are automatically deleted once the last reference to this file is closed. On Unix systems, named pipes can also be created without actually writing the file to the hard drive. Furthermore, named pipes offer a level of abstraction that files do not offer.
+
+\subsubsection{Shared Memory}
+Shared memory is exactly what it sounds like, a process shares memory with another process, which allows us to share global variables, locks, and any other data that the process wishes to expose. This has the benefit of being far faster than most of the other mechanisms. Furthermore, this also allows us to eliminate duplicate data that would otherwise exist in both processes. It's also worth noting that threads running as a part of the same process are running on shared memory by default.
+
+Care should be taken to synchronize access to shared memory to avoid multiple processes modifying the same data at the same time. We refer the reader to the techniques discussed in section \ref{sync} in order to do so.

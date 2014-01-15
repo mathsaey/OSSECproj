@@ -1,0 +1,12 @@
+%!TEX root = ../MathijsSaey-project.tex
+
+\section{Mechanisms}
+In this section, we introduce the various mechanisms at our disposal, each mechanism is accompanied by a small explanation. A program demonstrating a possible use case for each of these scenarios is presented in the next section.
+
+We differentiate between 2 different categories of mechanisms, synchronization and communication. 
+
+The first mechanism category, synchronization, allows threads or processes to share a common resource. The threads or processes do not need to be aware of the other threads/processes, they simply need to access the shared resource in a safe way.
+
+The second mechanism, communication, allows thread or processes to "talk" to each other, this can be used to send some requests or to pass some data. The processes need to be aware of the other other processes, but they don't need to be aware of the exact nature of the other processes.
+
+In practice, both of these mechanisms are utilized alongside one another. For instance, using a file to communicate between different processes often requires synchronizing the access to this file.

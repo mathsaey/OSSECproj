@@ -1,0 +1,10 @@
+report/*
+!report/*/
+!report/*.tex
+!report/*.pdf
+
+code/*.txt
+
+*.sublime-workspace
+*.DS_Store
+*.pyc

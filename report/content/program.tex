@@ -1,0 +1,81 @@
+%!TEX root = ../MathijsSaey-project.tex
+
+\section{The Programs}
+
+In this section, we introduce the various example programs that we wrote to showcase the various communication and synchronization techniques. 
+
+\subsection{Locks and Mutexes}
+We decided to showcase mutexes by having different processes accessing a shared file. The idea behind is the example is the simulation of multiple processes writing to a shared log file. The mutex prevents the processes from accessing the file at the same time.
+
+\lstinputlisting[label=lst:mutex, caption={Using locks to manage access to a file.}]{../code/mutex.py}
+\newpage
+
+\subsection{Semaphores}
+
+In our code example, semaphores are showcased by having a few threads access a "resource" that can only handle a few requests at the same time. We simulate this resource by forcing the process to sleep for a randomly determined amount of seconds. Only 3 processes are allowed to access our resource at the same time. Using semaphores, we can ensure that only 3 threads are accessing our resource at any given time.
+
+\lstinputlisting[label=lst:semaphore, caption={Using semaphores to limit access.}]{../code/semaphore.py}
+\newpage
+
+\subsection{Condition Variables and Monitors}
+
+We showcase condition variables by creating their typical usage scenario, we have a thread that will only do something useful if a certain condition is met. More specifically, we create 2 threads, a producer and a consumer thread. The producer produces 100 random integers and adds them to a shared resource. The consumer's only job is to display an alert if a lucky number (22) appears in the resource. In order to do this, the consumer decides to wait on the condition variable. If the producer creates our lucky number, it notifies the condition variable, which notifies our consumer thread.
+
+In python, a condition variable automatically creates a matching lock. Thus a python condition variable can be seen and treated as a monitor.
+
+\lstinputlisting[label=lst:condition, caption={Using condition variables to get notified when a condition occurs.}]	{../code/condition.py}
+\newpage
+
+\subsection{(Memory Mapped) Files}
+We demonstrate the use of files by having a few processes attempt to discover each other. In order to do this, each and every one of these programs writes its name to a shared file. After adding their name, the processes scan the file for the names of other processes.
+
+\lstinputlisting[label=lst:file, caption={Using a file to communicate.}]{../code/file.py}
+\newpage
+
+\subsection{Signals}
+In order to showcase signals, we created 2 processes. The first process performs a task that is time critical, if the task is not finished in time, the task should not finish at all. In order to enforce this, we create a second process called the guard process.
+
+The guard process's only goal is ensuring that the process finishes in time or not at all. When necessary, the guard process sends a kill signal to the other process.
+
+\lstinputlisting[label=lst:signal, caption={Sending a signal to terminate a process}]{../code/signal.py}
+\newpage
+
+\subsection{Sockets}
+We showed the use of sockets by creating a simple local ping server. The server listens to a port on localhost. A client can connect to the server and send it some data, the server will echo this data and answer the client by sending it a "pong" message. 
+
+\lstinputlisting[label=lst:sockets,caption={Using sockets for low level communication}]{../code/sockets.py}
+\newpage
+
+\subsection{Message Queues}
+In order to show a possible use of message queues, we followed the example of AmbientTalk and used the message queue as a way of asking a different process to perform some task. Our program  defines a worker process that only exists to process requests from other processes. In order to send a process to the worker thread, one simply adds a function and its arguments to the inQueue of the worker process. The worker process can now remove this data from the queue and execute this function with the given arguments. The results of function execution are added to the outQueue of the worker process, which can be read by other processes.
+
+\lstinputlisting[label=lst:queues, caption={Using a queue for message dispatching}]{../code/queues.py}
+\newpage
+
+\subsection{(Named) Pipes}
+We show the use of pipes by creating our own version of the \textit{pipes and filters} design pattern. In this design pattern, each filter is a module that performs one specific function. These filters are connected by pipes.
+
+In our pipes and filters implementation, every filter runs on a separate process. We uses pipes to connect these different processes.
+In order to implement this, we created 2 functions. The first, \textit{createFilter} takes a function and 2 pipe-ends. One of these ends is used to get incoming data, while the other is used to send outgoing data. These ends are not allowed to be connected to the same pipe.
+The second function, \textit{createProcess}, receives a list of functions. It creates a filter for each of these processes (with the createFilter function) and starts a process that executes this filter. It also ensures that the filters are properly connected through pipes.
+
+We used this machinery to create a simple pipeline that receives a sentence, which it converts to camel case. It does this in 4 steps, each realized in a specific filter.
+
+\begin{itemize}
+	\item The first filter splits the sentence into a list of words.
+	\item The second filter capitalizes the first letter of every word.
+	\item The third filter merges these words with no spaces in between.
+	\item The final filter changes the first letter of our string to lowercase.
+\end{itemize}
+
+\newpage
+\lstinputlisting[label=lst:pipes, caption={Using pipes to pass data.}]{../code/pipes.py}
+\newpage
+
+\subsection{Shared Memory}
+
+In our final example, we use shared memory to frequently check the status of another process. This can be useful if we want to display the state of another process that is continually generating new data. An example would be a daemon that is monitoring system performance, while another process displays this data to the user.
+
+Our process continually replaces data in the shared memory, another process, called the monitor, frequently checks the state of this memory and displays its contents on the screen. Finally, another piece of shared data is used to signal the processes to stop after an arbitrary amount of time.
+
+\lstinputlisting[label=lst:shared, caption={Sharing memory between processes}]{../code/shared.py}

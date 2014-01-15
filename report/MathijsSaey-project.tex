@@ -1,0 +1,31 @@
+\documentclass[12pt, a4paper]{article}
+
+\newcommand{\getTitle}{Operating Systems and Security Project Report: \\ Synchronization and Communication}
+\newcommand{\getAuthor}{Mathijs Saey}
+\newcommand{\getFullAuthor}{Mathijs Saey (94451) \\ mathsaey@vub.ac.be \\ \\ 2nd Master of Science in Applied Sciences and Engineering: \\ Computer Science}
+
+\input{content/preamble}
+
+\begin{document}
+
+%Options
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1ex}
+
+%Title + table of contents
+\input{content/titlepage}
+\input{content/abstract}
+\newpage
+\tableofcontents
+\newpage
+
+%Content
+\input{content/introduction}
+\input{content/mechanisms}
+	\input{content/sync}
+	\input{content/communication}
+\input{content/program}
+\input{content/conclusion}
+
+\printbibliography[heading = bibnumbered]
+\end{document}

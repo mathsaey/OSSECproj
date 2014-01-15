@@ -1,0 +1,52 @@
+%!TEX root = ../MathijsSaey-project.tex
+
+%Packages
+\usepackage{color}
+\usepackage{listings}
+\usepackage{graphicx} 
+\usepackage{longtable}
+\usepackage[center]{caption} %Puts captions in the center
+
+%Verbatim spacing
+\usepackage{etoolbox}
+\makeatletter
+\preto{\@verbatim}{\topsep=2pt}
+\makeatother
+
+%Bibliography
+\usepackage[backend=biber]{biblatex}
+\addbibresource{content/references.bib}
+
+%Hyperref + pdf meta info
+\usepackage[hidelinks]{hyperref}
+
+\hypersetup{
+ 	pdfauthor={\getAuthor},
+ 	pdftitle={\getTitle},
+ 	pdfkeywords={VUB},
+ 	pdfproducer=pdfLatex,
+ 	pdfcreator=texmaker,
+}
+
+%Extra colors
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{RGB}{117,117,117}
+\definecolor{lightblue}{RGB}{0,119,255}
+
+% Listing settings
+\lstset{language=Python,
+	basicstyle=\scriptsize,
+	commentstyle=\color{gray},
+	numberstyle=\color{black},
+	keywordstyle=\color{blue},
+	stringstyle=\color{dkgreen},
+	numbers=left,
+	xleftmargin=9pt,
+	morekeywords={with},
+	framexleftmargin=9pt,
+	showstringspaces=false,
+	breaklines=false,
+	numbersep=3pt,
+	frame=single,
+	captionpos=b,
+	tabsize=2}

@@ -1,0 +1,28 @@
+%!TEX root = ../MathijsSaey-project.tex
+
+\subsection{Synchronization}
+\label{sync}
+\subsubsection{Locks and Mutexes}
+
+The first and perhaps most well known way of synchronizing access to a shared resource is a simple, straightforward lock.
+When a thread reaches it's \textit{critical section}, the part of its code where it needs access to a shared resource, it simply requests a lock on the shared resource. If the resource is currently not locked, the thread acquires the lock, performs its critical section and opens the lock. Any other thread that attempts to obtain the lock will block until the lock is available.
+
+A mutex is simply a lock that is not limited to the current process. Instead, a mutex is managed by the system. 
+
+OS Task 5 \cite{task5} showcases using mutexes in the POSIX thread model.
+
+\subsubsection{Semaphores}
+
+Semaphores allow us to limit access to a certain resource. A semaphore allows us to specify the amount of threads that are allowed to access a resource. For instance, we could use a semaphore to dictate that only 10 processes can access a given database at the same time to avoid overloading our database with requests. 
+
+A mutex can be seen as a more limited semaphore. Indeed, a \textit{binary semaphore}, a semaphore that only allows one thread to access our resource at any given time, is functionally equivalent to a mutex.
+
+\subsubsection{Condition Variables}
+A Condition Variable on it's own does not allow us to safely access a shared resource, however condition variables can be used in combination with locks to create monitors, discussed in the next section.
+
+A condition variable can be seen as a collection of threads that are waiting for a certain condition to be met. Other threads can use this variable to notify a thread that a condition has been met. The main reason for doing this is to avoid \textit{busy waiting} threads, threads that wake up, check a condition and go back to sleep. Using a condition variable removes this overhead at the expense of other threads notifying the condition variable at the right moment.
+
+\subsubsection{Monitors}
+As we mentioned in the previous section, condition variables are not used on their own to safely access a resource. Instead, we use a combination of locks and condition variables access our shared resource. A combination of a condition variable and a lock is called a monitor. It's worth noting that some thread models (such as the posix thread model \cite{pthreads}) don't have a concept known as monitors, in these models, the programmer is tasked with creating a lock himself. \\ \textit{A condition variable is always used in conjunction with a mutex lock} \cite[8.1. Condition Variables Overview]{pthreads}
+
+The condition variable allows a thread in it's critical section to give up its lock and wait for a condition to be met. Another thread can now signal this thread about this condition through the condition variable. The first thread will now continue it's execution once it re-obtains the original lock. Typically, monitors are used to synchronize many threads, and a thread can choose to notify one or more of the waiting threads.

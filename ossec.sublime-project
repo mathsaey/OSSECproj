@@ -1,0 +1,20 @@
+{
+	"folders":
+	[
+		{
+			"path": "./",
+			"name":"Root",
+            "folder_exclude_patterns": ["code", "report"]
+        },
+        {
+        	"path": "./code",
+        	"name": "src",
+        	"file_exclude_patterns": ["*.pyc"]
+        },
+        {
+        	"path": "./report",
+        	"name": "report",
+        	"file_include_patterns": ["*.tex", "*.bib"]
+        }
+	]
+}

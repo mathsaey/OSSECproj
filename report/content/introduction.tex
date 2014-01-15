@@ -1,0 +1,47 @@
+%!TEX root = ../MathijsSaey-project.tex
+
+\section{Introduction}
+Computers have been able to run multiple programs since the early 1960's due to the introduction of concepts such as multiprogramming and time sharing. Even though an effective scheduler is all that is strictly required to run multiple programs on the same machine, modern day operating systems also need to deal with the need to make these processes communicate with one another. Besides that, these processes can also try to modify the same resources, leading to disaster if this resource is not accessed correctly.
+
+Fortunately, modern-day operating systems provide us with a sufficient amount of tools to handle most of these situations without reinventing the wheel every time we need to do so. These tools come in a wide amount of flavors, to cover multiple scenarios. However, finding the right tool in this box can still be hard for a novice to the field of multi-process programming.
+
+This paper provides an overview of some of the most common of these tools, along with some examples of their use in 2 modern day operating systems, Microsoft Windows, and Mac OSX. 
+
+The attentive reader might have noticed that we did not talk about threads up to this point. However, processes and threads are 2 very similar constructs, a process and a thread are both independent sequences of execution. The main difference is that threads tend to run in the same address space while processes don't. In this paper we will show instances of both process and thread communication and provide code examples for both thread and process based communication. Most of the showcased techniques work for both.
+
+\subsection*{About the code}
+
+Before we go into detail about the various tools a few practical remarks about the code might be in place.
+
+We decided to use the python \cite{python} programming language for our code examples. We did this because python runs on may different operating systems without too much hassle. Python also serves as an abstraction layer for the underlying system which means that we can focus on the underlying idea without worrying about it's implementation on the specific operating system. 
+
+We should also explain python's \textit{with} block statement. Simply put, with receives a lock and code block as input, with then automatically calls \textit{lock.acquire()} before starting the block. After finishing the block, with calls \textit{lock.release()}.
+Thus, the following pieces of code are equivalent:
+
+\begin{center}
+\begin{minipage}[c]{0.25\textwidth}
+\begin{lstlisting}[frame=none, numbers=none]
+with lock:
+	statement()
+\end{lstlisting}
+\end{minipage}
+\begin{minipage}[c]{0.25\textwidth}
+\begin{lstlisting}[frame=none, numbers=none]
+lock.acquire()
+statement()
+lock.release()
+\end{lstlisting}
+\end{minipage}
+\end{center}
+Throughout the code, we use \textit{with} a lot, we only use a lock explicitly in the code that showcases mutexes.
+
+
+It's important to note that running the provided python code on windows should be done from the command prompt. This is done with the following command:
+
+\begin{verbatim}
+> python progname.py
+\end{verbatim}
+
+This is required since not all of the multiprocessing module's functionality is available in the interactive interpreter \cite{pythonmulti}. All of the listed code was tested on python 3.3.3 on Windows 7 and OSX 10.9.1. 
+
+Finally, in case of any problems, a copy of the source code, report and related files can be found at \url{https://github.com/mathsaey/OSSECproj}.
